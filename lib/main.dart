@@ -119,13 +119,10 @@ class SecondScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     Container(
-                                        child: Image.network(
-                                            "https://img.icons8.com/ios/20/000000/water.png")),
-                                    Container(
                                       child: Text(
-                                        "Watering",
+                                        "34°C",
                                         style: TextStyle(
-                                            fontSize: 18,
+                                            fontSize: 40,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
@@ -134,8 +131,7 @@ class SecondScreen extends StatelessWidget {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Text("Moderate"),
-                                Text("1-2 times/week")
+                                Text("Temperature"),
                               ],
                             ),
                           )
@@ -249,6 +245,29 @@ class SecondScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              Row(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.all(25),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Description",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.75,
+                            padding: const EdgeInsets.all(10),
+                            child: const Text(
+                              "Most crassula plants grown as houseplants originated from the eastern cape of South Africa. If you have the proper climate, the plants look terrific in the garden, but all look just as excellent indoors.",
+                              //overflow: TextOverflow.fade,
+                            ),
+                          )
+                        ],
+                      ))
+                ],
+              )
             ]),
       ),
     ));

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "540013179325",
+    "project_id": "plant-monitoring-system-69b1a",
+    "storage_bucket": "plant-monitoring-system-69b1a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540013179325:android:af8bdb2e649645a1efe2d4",
+        "android_client_info": {
+          "package_name": "com.example.plantMonitoring"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540013179325-l28h793dr77roq3ugpgmbaadv7avl1h7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe_jmNy8StXx601ZsmhkK2QFOsTncCi3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540013179325-l28h793dr77roq3ugpgmbaadv7avl1h7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

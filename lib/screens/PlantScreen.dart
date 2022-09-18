@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -51,6 +52,26 @@ class _PlantScreenState extends State<PlantScreen> {
                   recMess.payload.message);
 
               final result = jsonDecode(pt);
+              var arr = ["High", "Moderate", "Low"];
+
+              Queue<double> q = new Queue<double>();
+              q.add(0.0);
+              q.add(0.0);
+              q.add(0.0);
+              q.add(0.0);
+              q.add(0.0);
+              q.add((result["temperature"] +
+                      result["humidity"] +
+                      result["moisture"]) /
+                  3);
+              if (q.length > 5) {
+                q.removeFirst();
+              }
+              double first = q.elementAt(0);
+              double second = q.elementAt(1) != null ? q.elementAt(1) : 0.0;
+              double third = q.elementAt(2) != null ? q.elementAt(2) : 0.0;
+              double fourth = q.elementAt(3) != null ? q.elementAt(3) : 0.0;
+              double fifth = q.elementAt(4) != null ? q.elementAt(4) : 0.0;
 
               return Padding(
                 padding: const EdgeInsets.all(
@@ -194,6 +215,8 @@ class _PlantScreenState extends State<PlantScreen> {
                                       children: <Widget>[
                                         Row(
                                           children: [
+                                            Image.network(
+                                                "https://img.icons8.com/external-those-icons-lineal-those-icons/30/000000/external-humidity-weather-those-icons-lineal-those-icons.png"),
                                             Text(
                                               " ${result["humidity"] != null ? (result["humidity"] > 100 ? (result["humidity"] / 2).toStringAsFixed(1) : result["humidity"].toStringAsFixed(1)) : 0.00} %",
                                               style: const TextStyle(
@@ -206,9 +229,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                         const SizedBox(
                                           height: 10,
                                         ),
+                                        Column(
+                                          children: [
+                                            if (result["humidity"] > 75.0)
+                                              Text('High')
+                                            else
+                                              Text('Moderate'),
+                                          ],
+                                        ),
                                         const Text("Humidity"),
-                                        const Text("Moderate"),
-                                        const Text("sparse spraying")
                                       ],
                                     ),
                                   ),
@@ -247,9 +276,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                         Row(
                                           children: [
                                             Image.network(
-                                                "https://img.icons8.com/ios/20/000000/water.png"),
+                                                "https://img.icons8.com/ios/30/000000/water.png"),
                                             Text(
-                                              "${result["moisture"] != null ? result["moisture"] <= 100 ? (result["moisture"] * 2).toStringAsFixed(1) : result["moisture"].toStringAsFixed(1) : 0.00}",
+                                              "  ${result["moisture"] != null ? result["moisture"].toStringAsFixed(1) : 0.00}",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -260,9 +289,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        const Text("Watering"),
-                                        const Text("Moderate"),
-                                        const Text("1-2 times/week")
+                                        Column(
+                                          children: [
+                                            if (result["moisture"] >= 5)
+                                              Text('High')
+                                            else
+                                              Text('Low'),
+                                          ],
+                                        ),
+                                        const Text("Soil Moisture"),
                                       ],
                                     ),
                                   ),
@@ -326,26 +361,11 @@ class _PlantScreenState extends State<PlantScreen> {
                           series: <LineSeries<SalesData, String>>[
                             LineSeries<SalesData, String>(
                                 dataSource: <SalesData>[
-                                  SalesData(
-                                      'Mon',
-                                      (result["moisture"] -
-                                          Random().nextInt(10))),
-                                  SalesData(
-                                      'Tue',
-                                      (result["moisture"] -
-                                          Random().nextInt(10))),
-                                  SalesData(
-                                      'Wed',
-                                      (result["moisture"] -
-                                          Random().nextInt(10))),
-                                  SalesData(
-                                      'Thurs',
-                                      (result["moisture"] -
-                                          Random().nextInt(10))),
-                                  SalesData(
-                                      'Fri',
-                                      (result["moisture"] -
-                                          Random().nextInt(10)))
+                                  SalesData('-5hr', first),
+                                  SalesData('-4hr', (result["moisture"] - 4)),
+                                  SalesData('-3hr', (result["moisture"])),
+                                  SalesData('-2hr', (result["moisture"] + 5)),
+                                  SalesData('now', (result["moisture"]))
                                 ],
                                 xValueMapper: (SalesData sales, _) =>
                                     sales.year,

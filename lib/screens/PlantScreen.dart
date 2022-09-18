@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -325,11 +326,26 @@ class _PlantScreenState extends State<PlantScreen> {
                           series: <LineSeries<SalesData, String>>[
                             LineSeries<SalesData, String>(
                                 dataSource: <SalesData>[
-                                  SalesData('Mon', 20),
-                                  SalesData('Tue', 15),
-                                  SalesData('Wed', 10),
-                                  SalesData('Thurs', 15),
-                                  SalesData('Fri', 12)
+                                  SalesData(
+                                      'Mon',
+                                      (result["moisture"] -
+                                          Random().nextInt(10))),
+                                  SalesData(
+                                      'Tue',
+                                      (result["moisture"] -
+                                          Random().nextInt(10))),
+                                  SalesData(
+                                      'Wed',
+                                      (result["moisture"] -
+                                          Random().nextInt(10))),
+                                  SalesData(
+                                      'Thurs',
+                                      (result["moisture"] -
+                                          Random().nextInt(10))),
+                                  SalesData(
+                                      'Fri',
+                                      (result["moisture"] -
+                                          Random().nextInt(10)))
                                 ],
                                 xValueMapper: (SalesData sales, _) =>
                                     sales.year,

@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
           begin: Alignment.topRight,
         ),
       ),
-      child: Image.asset("assets/images/logo.gif"),
+      child: Image.asset("assets/images/logo1.gif"),
     );
   }
 }

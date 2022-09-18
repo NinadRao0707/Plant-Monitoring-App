@@ -64,7 +64,7 @@ flutter:
     - assets/certs/DeviceCertificate.crt
     - assets/certs/Private.key
     - assets/certs/RootCA.pem
-    - assets/images/logo.gif
+    - assets/images/logo1.gif
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

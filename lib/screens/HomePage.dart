@@ -34,8 +34,7 @@ class _HomePageState extends State<HomePage> {
           begin: Alignment.topRight,
         ),
       ),
-      child:
-          Image.network("https://img.icons8.com/color/144/000000/sprout.png"),
+      child: Image.asset("assets/images/logo.gif"),
     );
   }
 }

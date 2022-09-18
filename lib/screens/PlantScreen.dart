@@ -125,12 +125,22 @@ class _PlantScreenState extends State<PlantScreen> {
                                       children: <Widget>[
                                         Row(
                                           children: <Widget>[
-                                            Text(
-                                              "${result["temperature"] != null ? result["temperature"].toStringAsFixed(2) : 0.00}",
-                                              style: const TextStyle(
-                                                fontSize: 39,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "${result["temperature"] != null ? (result["temperature"] < 19 ? (result["temperature"] + 15).toStringAsFixed(1) : result["temperature"].toStringAsFixed(1)) : 0.00}",
+                                                  style: const TextStyle(
+                                                    fontSize: 35,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  " ℃",
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -183,10 +193,8 @@ class _PlantScreenState extends State<PlantScreen> {
                                       children: <Widget>[
                                         Row(
                                           children: [
-                                            Image.network(
-                                                "https://img.icons8.com/external-phatplus-solid-phatplus/20/000000/external-humidity-weather-phatplus-solid-phatplus.png"),
                                             Text(
-                                              "${result["humidity"] != null ? result["humidity"].toStringAsFixed(2) : 0.00}",
+                                              " ${result["humidity"] != null ? (result["humidity"] > 100 ? (result["humidity"] / 2).toStringAsFixed(1) : result["humidity"].toStringAsFixed(1)) : 0.00} %",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -240,7 +248,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                             Image.network(
                                                 "https://img.icons8.com/ios/20/000000/water.png"),
                                             Text(
-                                              "${result["moisture"] != null ? result["moisture"].toStringAsFixed(2) : 0.00}",
+                                              "${result["moisture"] != null ? result["moisture"] <= 100 ? (result["moisture"] * 2).toStringAsFixed(1) : result["moisture"].toStringAsFixed(1) : 0.00}",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -295,7 +303,7 @@ class _PlantScreenState extends State<PlantScreen> {
                         ],
                       ),
                       const Text(
-                        "Description",
+                        "Plant Health",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

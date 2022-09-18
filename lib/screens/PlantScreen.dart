@@ -352,7 +352,7 @@ class _PlantScreenState extends State<PlantScreen> {
     ByteData privateKey = await rootBundle.load('assets/certs/Private.key');
 
     SecurityContext context = SecurityContext.defaultContext;
-    context.setTrustedCertificatesBytes(rootCA.buffer.asUint8List());
+    context.setClientAuthoritiesBytes(rootCA.buffer.asUint8List());
     context.useCertificateChainBytes(deviceCert.buffer.asUint8List());
     context.usePrivateKeyBytes(privateKey.buffer.asUint8List());
 

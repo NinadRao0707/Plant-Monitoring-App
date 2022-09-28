@@ -20,6 +20,7 @@ class PlantScreen extends StatefulWidget {
 
 class _PlantScreenState extends State<PlantScreen> {
   String statusText = "Status Test";
+  Queue<double> q = new Queue<double>();
   Future<bool> isConnected = Future.value(false);
   final client =
       MqttServerClient('a1n0zq7k1z3sqk-ats.iot.ap-south-1.amazonaws.com', '');
@@ -53,20 +54,16 @@ class _PlantScreenState extends State<PlantScreen> {
 
               final result = jsonDecode(pt);
               var arr = ["High", "Moderate", "Low"];
+              double avg = (q.length == 0) ? 0.0 : q.elementAt(q.length - 1);
 
-              Queue<double> q = new Queue<double>();
-              q.add(0.0);
-              q.add(0.0);
-              q.add(0.0);
-              q.add(0.0);
-              q.add(0.0);
-              q.add((result["temperature"] +
-                      result["humidity"] +
-                      result["moisture"]) /
-                  3);
+              q.add(result["moisture"] == null
+                  ? 0.0
+                  : approxRollingAverage(avg, result["moisture"]));
+
               if (q.length > 5) {
                 q.removeFirst();
               }
+
               double first = q.elementAt(0);
               double second = q.elementAt(1) != null ? q.elementAt(1) : 0.0;
               double third = q.elementAt(2) != null ? q.elementAt(2) : 0.0;
@@ -361,11 +358,11 @@ class _PlantScreenState extends State<PlantScreen> {
                           series: <LineSeries<SalesData, String>>[
                             LineSeries<SalesData, String>(
                                 dataSource: <SalesData>[
-                                  SalesData('-5hr', first),
-                                  SalesData('-4hr', (result["moisture"] - 4)),
-                                  SalesData('-3hr', (result["moisture"])),
-                                  SalesData('-2hr', (result["moisture"] + 5)),
-                                  SalesData('now', (result["moisture"]))
+                                  SalesData('-5hr', q.elementAt(0)),
+                                  SalesData('-4hr', q.elementAt(1)),
+                                  SalesData('-3hr', q.elementAt(2)),
+                                  SalesData('-2hr', q.elementAt(3)),
+                                  SalesData('now', q.elementAt(4))
                                 ],
                                 xValueMapper: (SalesData sales, _) =>
                                     sales.year,
@@ -446,6 +443,13 @@ class _PlantScreenState extends State<PlantScreen> {
   void pong() {
     setStatus("Ping response client callback invoked");
   }
+}
+
+double approxRollingAverage(double avg, double new_sample) {
+  avg -= avg / 5;
+  avg += new_sample / 5;
+
+  return avg;
 }
 
 class SalesData {

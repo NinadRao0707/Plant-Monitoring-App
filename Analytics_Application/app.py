@@ -1,10 +1,11 @@
 # pip install awsiotsdk
 
-from flask import Flask
+from flask import Flask, send_file
 import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt
 from pandas import Series
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 
 import time
 import datetime
@@ -14,7 +15,7 @@ import AWSIoTPythonSDK.MQTTLib as AWSIoTPyMQTT
 
 app = Flask(__name__)
 
-dataframe = {'datetime':[], 'moisture':[]}
+dataframe = {'datetime':[], 'moisture':[], 'humidity':[], 'temperature':[], 'light':[]}
 
 ENDPOINT = "a1n0zq7k1z3sqk-ats.iot.ap-south-1.amazonaws.com"
 CLIENT_ID = "1"
@@ -48,12 +49,18 @@ def create_dataset():
         data = json.loads(message.payload)
         time = datetime.datetime.now()
         moisture = data["moisture"]
+        humidity = data["humidity"]
+        temperature = data["temperature"]
+        light = data["light"]
         dataframe["datetime"].append(time);
         dataframe["moisture"].append(moisture);
+        dataframe["humidity"].append(humidity);
+        dataframe["temperature"].append(temperature);
+        dataframe["light"].append(light);
 
     # Publish to the same topic in a loop forever
     loopCount = 0
-    while loopCount<=10:
+    while loopCount<=1000:
         myAWSIoTMQTTClient.subscribe(topic=TOPIC, QoS=mqtt.QoS.AT_LEAST_ONCE, callback=on_data_received)
         loopCount += 1
         time.sleep(1)
@@ -67,21 +74,60 @@ def create_dataset():
 
     return "Training dataset created"
 
-@app.route('/visualize_dataset')
-def visualize_dataset():
+@app.route('/visualize')
+def visualize():
     df = pd.read_csv('train.csv')
+    df['datetime'] = pd.to_datetime(df.datetime,infer_datetime_format=True) 
+
     df.index = df['datetime']
     ts = df['moisture'] 
     plt.figure(figsize=(13,7)) 
     plt.plot(ts, label='Moisture') 
     plt.title('Time Series') 
-    plt.xlabel("Time(year-month)") 
-    plt.ylabel("moisture (%)") 
+    plt.xlabel("Time") 
+    plt.ylabel("Moisture (%)") 
     plt.legend(loc='best')
-    plt.show()
+    # plt.savefig('training_dataset.png')
 
-    return "Hi"
+    return send_file('training_dataset.png', mimetype='image/gif')
+
+@app.route('/train')
+def train():
+    df = pd.read_csv('train.csv')
+    df['datetime'] = pd.to_datetime(df.datetime,infer_datetime_format=True)
+    df.index = df['datetime']
+
+    plt.figure(figsize=(13,7)) 
+    plt.plot(df['moisture'] , color = "black")
+    plt.title('Time Series') 
+    plt.xlabel("Time") 
+    plt.ylabel("Moisture (%)") 
+    plt.legend(loc='best')
+
+    # return send_file('train_test_dataset.png', mimetype='image/gif')
+
+    y = df['moisture']
+    SARIMAXmodel = SARIMAX(y, order = (1,0,1))
+    SARIMAXmodel = SARIMAXmodel.fit()
+
+    y_pred = SARIMAXmodel.get_forecast(len(df.index)+1000)
+    y_pred_df = y_pred.conf_int(alpha = 0.05) 
+    y_pred_df["Predictions"] = SARIMAXmodel.predict(start = y_pred_df.index[0], end = y_pred_df.index[-1])
+    y_pred_df['datetime'] = [df["datetime"].iloc[-1] + datetime.timedelta(seconds=i*2) for i in range(len(y_pred_df))]
+    y_pred_df.index = y_pred_df['datetime']
+    for index, row in y_pred_df.iterrows():
+        if(row['Predictions'] <= 10 ):
+            print('Water the plant before:',index)
+            plt.axvline(index)
+            plt.axhline(10)
+            break
+    
+    y_pred_out = y_pred_df["Predictions"]
+    plt.plot(y_pred_out, color='red', label = 'Predictions')
+    plt.savefig('prediction_dataset.png')
+    return send_file('prediction_dataset.png', mimetype='image/gif')
+
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

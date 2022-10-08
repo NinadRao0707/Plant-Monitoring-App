@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class PlantScreen extends StatefulWidget {
   const PlantScreen({super.key});
@@ -28,6 +30,24 @@ class _PlantScreenState extends State<PlantScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<String> getTimestamp() async {
+    final response =
+        await http.get(Uri.parse('http://192.168.29.144:5000/predict'));
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return "null";
+    }
+  }
+
+  late Future<String> futureString;
+
+  @override
+  void initState() {
+    super.initState();
+    futureString = getTimestamp();
   }
 
   @override
@@ -95,7 +115,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                 border: Border.all(
                                   width: 5,
                                   color:
-                                  const Color.fromARGB(255, 229, 238, 208),
+                                      const Color.fromARGB(255, 229, 238, 208),
                                 ),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(
@@ -113,7 +133,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                     height: 100.0,
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Row(
                                           children: <Widget>[
@@ -163,7 +183,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                 border: Border.all(
                                   width: 5,
                                   color:
-                                  const Color.fromARGB(255, 229, 238, 208),
+                                      const Color.fromARGB(255, 229, 238, 208),
                                 ),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(
@@ -181,7 +201,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                     height: 100.0,
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Row(
                                           children: [
@@ -200,9 +220,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                           height: 10,
                                         ),
                                         Column(
-                                          children: [
-                                            Text("--")
-                                          ],
+                                          children: [Text("--")],
                                         ),
                                         const Text("Humidity"),
                                       ],
@@ -220,7 +238,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                 border: Border.all(
                                   width: 5,
                                   color:
-                                  const Color.fromARGB(255, 229, 238, 208),
+                                      const Color.fromARGB(255, 229, 238, 208),
                                 ),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(
@@ -238,7 +256,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                     height: 100.0,
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Row(
                                           children: [
@@ -257,9 +275,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                           height: 10,
                                         ),
                                         Column(
-                                          children: [
-                                            Text("--")
-                                          ],
+                                          children: [Text("--")],
                                         ),
                                         const Text("Soil Moisture"),
                                       ],
@@ -280,7 +296,7 @@ class _PlantScreenState extends State<PlantScreen> {
                             child: Column(
                               children: [
                                 const Text(
-                                  "Description",
+                                  "Water the plant before it's too late!",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -288,12 +304,12 @@ class _PlantScreenState extends State<PlantScreen> {
                                 ),
                                 Container(
                                   width:
-                                  MediaQuery.of(context).size.width * 0.75,
+                                      MediaQuery.of(context).size.width * 0.75,
                                   padding: const EdgeInsets.all(
                                     10,
                                   ),
                                   child: const Text(
-                                    "Most crassula plants grown as houseplants originated from the eastern cape of South Africa. If you have the proper climate, the plants look terrific in the garden, but all look just as excellent indoors.",
+                                    "",
                                     //overflow: TextOverflow.fade,
                                   ),
                                 ),
@@ -326,18 +342,18 @@ class _PlantScreenState extends State<PlantScreen> {
                             LineSeries<SalesData, String>(
                                 dataSource: <SalesData>[
                                   SalesData('-5hr', 2.0),
-                                  SalesData('-4hr',2.0),
-                                  SalesData('-3hr',2.0),
+                                  SalesData('-4hr', 2.0),
+                                  SalesData('-3hr', 2.0),
                                   SalesData('-2hr', 2.0),
                                   SalesData('now', 2.0)
                                 ],
                                 xValueMapper: (SalesData sales, _) =>
-                                sales.year,
+                                    sales.year,
                                 yValueMapper: (SalesData sales, _) =>
-                                sales.sales,
+                                    sales.sales,
                                 // Enable data label
                                 dataLabelSettings:
-                                const DataLabelSettings(isVisible: false))
+                                    const DataLabelSettings(isVisible: false))
                           ],
                         ),
                       ),
@@ -615,8 +631,24 @@ class _PlantScreenState extends State<PlantScreen> {
                             ),
                             child: Column(
                               children: [
+                                FutureBuilder<String>(
+                                  future: futureString,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(DateFormat('MMMM d, h:mm a')
+                                          .format(
+                                              DateTime.parse(snapshot.data!))
+                                          .toString());
+                                    } else if (snapshot.hasError) {
+                                      return Text('${snapshot.error}');
+                                    }
+
+                                    // By default, show a loading spinner.
+                                    return const CircularProgressIndicator();
+                                  },
+                                ),
                                 const Text(
-                                  "Description",
+                                  "Water Plant",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,

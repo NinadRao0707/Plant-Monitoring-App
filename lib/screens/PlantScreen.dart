@@ -33,8 +33,8 @@ class _PlantScreenState extends State<PlantScreen> {
   }
 
   Future<String> getTimestamp() async {
-    final response =
-        await http.get(Uri.parse('http://192.168.29.144:5000/predict'));
+    final response = await http
+        .get(Uri.parse('https://plant-analytics.onrender.com/render'));
     if (response.statusCode == 200) {
       return response.body;
     } else {

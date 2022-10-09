@@ -62,10 +62,8 @@ class _PlantScreenState extends State<PlantScreen> {
         child: StreamBuilder(
           stream: client.updates,
           builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              // var result = 0;
-
-              // Iska end mein dekhte
+            if (!snapshot.hasData) {
+              notification(1);
               return Padding(
                 padding: const EdgeInsets.all(
                   20,
@@ -347,6 +345,7 @@ class _PlantScreenState extends State<PlantScreen> {
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(
@@ -357,20 +356,18 @@ class _PlantScreenState extends State<PlantScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
-                                  "Water the Plant by",
+                                  "Seems like your Plant isn't connected",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                ElevatedButton(
-                                    onPressed: () async {
-                                      await service.showNotification(
-                                          uid: 0,
-                                          title: 'Hello',
-                                          body: 'fsdfsdfsdfds');
-                                    },
-                                    child: Text("watered"))
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, top: 20, right: 20),
+                                  child: Image.network(
+                                      "https://img.icons8.com/external-wanicon-two-tone-wanicon/64/000000/external-disconnected-cloud-technology-wanicon-two-tone-wanicon.png"),
+                                ),
                               ],
                             )),
                           ),
@@ -399,11 +396,11 @@ class _PlantScreenState extends State<PlantScreen> {
                           series: <LineSeries<SalesData, String>>[
                             LineSeries<SalesData, String>(
                                 dataSource: <SalesData>[
-                                  SalesData('-5', 2.0),
-                                  SalesData('-4', 2.0),
-                                  SalesData('-3', 2.0),
-                                  SalesData('-2', 2.0),
-                                  SalesData('now', 2.0)
+                                  SalesData('-5', 0.0),
+                                  SalesData('-4', 0.0),
+                                  SalesData('-3', 0.0),
+                                  SalesData('-2', 0.0),
+                                  SalesData('now', 0.0)
                                 ],
                                 xValueMapper: (SalesData sales, _) =>
                                     sales.year,
@@ -419,7 +416,7 @@ class _PlantScreenState extends State<PlantScreen> {
                   ),
                 ),
               );
-            else {
+            } else {
               final mqttReceivedMessages =
                   snapshot.data as List<MqttReceivedMessage<MqttMessage?>>?;
 
@@ -440,7 +437,9 @@ class _PlantScreenState extends State<PlantScreen> {
               if (q.length > 5) {
                 q.removeFirst();
               }
-
+              if (result["moisture"] <= 10.0) {
+                notification(2);
+              }
               double first = q.elementAt(0);
               double second = q.elementAt(1) != null ? q.elementAt(1) : 0.0;
               double third = q.elementAt(2) != null ? q.elementAt(2) : 0.0;
@@ -856,6 +855,20 @@ class _PlantScreenState extends State<PlantScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> notification(int val) async {
+    if (val == 1) {
+      await service.showNotification(
+          uid: 0,
+          title: 'Connection Error',
+          body: "Your Plant isn't connected!");
+    } else if (val == 2) {
+      await service.showNotification(
+          uid: 0,
+          title: 'Dry Plant !',
+          body: "Water your Plant it'll dry up soon !");
+    }
   }
 
   Future<bool> mqttConnect(String uniqueID) async {

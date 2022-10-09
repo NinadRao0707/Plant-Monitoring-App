@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:plant_monitoring_system/screens/local.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -43,9 +44,11 @@ class _PlantScreenState extends State<PlantScreen> {
   }
 
   late Future<String> futureString;
-
+  late final LocalNotificationService service;
   @override
   void initState() {
+    service = LocalNotificationService();
+    service.initialize();
     super.initState();
     futureString = getTimestamp();
   }
@@ -74,7 +77,7 @@ class _PlantScreenState extends State<PlantScreen> {
                         height: 40,
                       ),
                       const Text(
-                        "Crassula",
+                        "Garden.ly",
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
@@ -85,19 +88,72 @@ class _PlantScreenState extends State<PlantScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           InkWell(
                             onTap: () {},
                             child: SizedBox(
-                                width: 100.0,
                                 height: 150.0,
                                 child: Image.network(
                                     "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80")),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 229, 238, 208),
+                                border: Border.all(
+                                  width: 5,
+                                  color:
+                                      const Color.fromARGB(255, 229, 238, 208),
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(
+                                    50,
+                                  ),
+                                ),
+                              ),
+                              width: 150.0,
+                              height: 150.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "0",
+                                        style: const TextStyle(
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        " lux",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const Text("Light Intensity"),
+                                ],
+                              ),
+                            ),
                           ),
                           InkWell(
                             onTap: () {},
@@ -120,40 +176,35 @@ class _PlantScreenState extends State<PlantScreen> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  SizedBox(
-                                    width: 100.0,
-                                    height: 100.0,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "0",
-                                                  style: const TextStyle(
-                                                    fontSize: 35,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  " ℃",
-                                                  style: const TextStyle(
-                                                    fontSize: 20,
-                                                  ),
-                                                )
-                                              ],
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            "0",
+                                            style: const TextStyle(
+                                              fontSize: 35,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        const Text("Temperature"),
-                                      ],
-                                    ),
+                                          ),
+                                          const Text(
+                                            " ℃",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const Text("Temperature"),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -196,14 +247,22 @@ class _PlantScreenState extends State<PlantScreen> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            Image.network(
-                                                "https://img.icons8.com/external-those-icons-lineal-those-icons/30/000000/external-humidity-weather-those-icons-lineal-those-icons.png"),
                                             Text(
                                               "0",
                                               style: const TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 35,
                                                 fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Text(
+                                              " %",
+                                              style: TextStyle(
+                                                fontSize: 20,
                                               ),
                                             ),
                                           ],
@@ -212,7 +271,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                           height: 10,
                                         ),
                                         Column(
-                                          children: [Text("--")],
+                                          children: [Text("low")],
                                         ),
                                         const Text("Humidity"),
                                       ],
@@ -251,23 +310,31 @@ class _PlantScreenState extends State<PlantScreen> {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            Image.network(
-                                                "https://img.icons8.com/ios/30/000000/water.png"),
                                             Text(
                                               "0",
                                               style: const TextStyle(
-                                                fontSize: 18,
+                                                fontSize: 35,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
+                                            const Text(
+                                              " %",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
+                                            )
                                           ],
                                         ),
                                         const SizedBox(
                                           height: 10,
                                         ),
                                         Column(
-                                          children: [Text("--")],
+                                          children: [Text("Low")],
                                         ),
                                         const Text("Soil Moisture"),
                                       ],
@@ -286,25 +353,23 @@ class _PlantScreenState extends State<PlantScreen> {
                               25,
                             ),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
-                                  "Water the plant before it's too late!",
+                                  "Water the Plant by",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.75,
-                                  padding: const EdgeInsets.all(
-                                    10,
-                                  ),
-                                  child: const Text(
-                                    "",
-                                    //overflow: TextOverflow.fade,
-                                  ),
-                                ),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      await service.showNotification(
+                                          id: 0,
+                                          title: 'Hello',
+                                          body: 'fsdfsdfsdfds');
+                                    },
+                                    child: Text("watered"))
                               ],
                             ),
                           ),
@@ -333,10 +398,10 @@ class _PlantScreenState extends State<PlantScreen> {
                           series: <LineSeries<SalesData, String>>[
                             LineSeries<SalesData, String>(
                                 dataSource: <SalesData>[
-                                  SalesData('-5hr', 2.0),
-                                  SalesData('-4hr', 2.0),
-                                  SalesData('-3hr', 2.0),
-                                  SalesData('-2hr', 2.0),
+                                  SalesData('-5', 2.0),
+                                  SalesData('-4', 2.0),
+                                  SalesData('-3', 2.0),
+                                  SalesData('-2', 2.0),
                                   SalesData('now', 2.0)
                                 ],
                                 xValueMapper: (SalesData sales, _) =>

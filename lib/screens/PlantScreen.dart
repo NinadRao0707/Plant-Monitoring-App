@@ -352,7 +352,8 @@ class _PlantScreenState extends State<PlantScreen> {
                             padding: const EdgeInsets.all(
                               25,
                             ),
-                            child: Column(
+                            child: Center(
+                                child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text(
@@ -365,13 +366,13 @@ class _PlantScreenState extends State<PlantScreen> {
                                 ElevatedButton(
                                     onPressed: () async {
                                       await service.showNotification(
-                                          id: 0,
+                                          uid: 0,
                                           title: 'Hello',
                                           body: 'fsdfsdfsdfds');
                                     },
                                     child: Text("watered"))
                               ],
-                            ),
+                            )),
                           ),
                         ],
                       ),

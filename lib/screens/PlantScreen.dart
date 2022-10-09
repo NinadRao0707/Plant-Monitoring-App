@@ -64,6 +64,7 @@ class _PlantScreenState extends State<PlantScreen> {
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               notification(1);
+
               return Padding(
                 padding: const EdgeInsets.all(
                   20,
@@ -362,6 +363,11 @@ class _PlantScreenState extends State<PlantScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      timedNotif(4);
+                                    },
+                                    child: Text("4 secs")),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 20, top: 20, right: 20),
@@ -437,9 +443,14 @@ class _PlantScreenState extends State<PlantScreen> {
               if (q.length > 5) {
                 q.removeFirst();
               }
+              DateTime now = DateTime.now();
               if (result["moisture"] <= 10.0) {
                 notification(2);
+              } else if ((now.hour <= 15 && now.hour >= 7) &&
+                  result["light"] < 1.2) {
+                notification(3);
               }
+
               double first = q.elementAt(0);
               double second = q.elementAt(1) != null ? q.elementAt(1) : 0.0;
               double third = q.elementAt(2) != null ? q.elementAt(2) : 0.0;
@@ -781,17 +792,33 @@ class _PlantScreenState extends State<PlantScreen> {
                                     future: futureString,
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
-                                        return Text(
-                                          DateFormat('MMM d, h:mm a')
-                                              .format(DateTime.parse(
-                                                  snapshot.data!))
-                                              .toString(),
-                                          style: const TextStyle(
-                                            fontSize: 25,
-                                            fontStyle: FontStyle.italic,
-                                            fontFamily: 'Roboto',
-                                          ),
-                                          textAlign: TextAlign.center,
+                                        timedNotif(30 * 60);
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Today",
+                                              style: const TextStyle(
+                                                fontSize: 25,
+                                                fontStyle: FontStyle.italic,
+                                                fontFamily: 'Roboto',
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            Text(
+                                              DateFormat('h:mm a')
+                                                  .format(DateTime.parse(
+                                                      snapshot.data!))
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                fontSize: 25,
+                                                fontStyle: FontStyle.italic,
+                                                fontFamily: 'Roboto',
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            )
+                                          ],
                                         );
                                       } else if (snapshot.hasError) {
                                         return Text('${snapshot.error}');
@@ -868,7 +895,20 @@ class _PlantScreenState extends State<PlantScreen> {
           uid: 0,
           title: 'Dry Plant !',
           body: "Water your Plant it'll dry up soon !");
+    } else if (val == 3) {
+      await service.showNotification(
+          uid: 0,
+          title: 'Sunlight Needed!',
+          body: "Place you plant in sunlight for a few hours!");
     }
+  }
+
+  Future<void> timedNotif(int seconds) async {
+    await service.showScheduledNotification(
+        uid: 0,
+        title: 'Time to Water !',
+        body: "Water your lovely Plant!",
+        seconds: seconds);
   }
 
   Future<bool> mqttConnect(String uniqueID) async {

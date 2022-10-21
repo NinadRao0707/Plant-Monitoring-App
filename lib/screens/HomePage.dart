@@ -16,9 +16,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Timer(
-        const Duration(seconds: 3),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const PlantScreen())));
+      const Duration(seconds: 3),
+      () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const PlantScreen()),
+      ),
+    );
   }
 
   @override
@@ -28,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         gradient: LinearGradient(
           colors: [
             Color.fromARGB(255, 250, 247, 250),
-            Color.fromARGB(255, 214, 245, 187)
+            Color.fromARGB(255, 214, 245, 187),
           ],
           end: Alignment.bottomLeft,
           begin: Alignment.topRight,

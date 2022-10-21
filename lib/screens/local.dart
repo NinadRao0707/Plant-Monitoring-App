@@ -1,5 +1,4 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -11,7 +10,7 @@ class LocalNotificationService {
     tz.initializeTimeZones();
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@drawable/notification');
-    final InitializationSettings settings =
+    const InitializationSettings settings =
         InitializationSettings(android: androidInitializationSettings);
 
     await _localNotificationService.initialize(
@@ -28,7 +27,7 @@ class LocalNotificationService {
             priority: Priority.max,
             playSound: true);
 
-    return NotificationDetails(android: androidNotificationDetails);
+    return const NotificationDetails(android: androidNotificationDetails);
   }
 
   Future<void> showNotification({
@@ -62,10 +61,12 @@ class LocalNotificationService {
 
   void onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) {
+    // ignore: avoid_print
     print('id $id');
   }
 
   void onSelectNotification(String? payload) {
+    // ignore: avoid_print
     print('payload $payload');
   }
 }

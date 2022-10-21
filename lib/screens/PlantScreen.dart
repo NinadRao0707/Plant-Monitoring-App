@@ -1,17 +1,16 @@
 // ignore_for_file: file_names
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'dart:collection';
 import 'package:flutter/services.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:plant_monitoring_system/screens/local.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 class PlantScreen extends StatefulWidget {
@@ -23,6 +22,7 @@ class PlantScreen extends StatefulWidget {
 
 class _PlantScreenState extends State<PlantScreen> {
   String statusText = "Status Test";
+  // ignore: unnecessary_new
   Queue<double> q = new Queue<double>();
   Future<bool> isConnected = Future.value(false);
   final client =
@@ -93,9 +93,10 @@ class _PlantScreenState extends State<PlantScreen> {
                           InkWell(
                             onTap: () {},
                             child: SizedBox(
-                                height: 150.0,
-                                child: Image.network(
-                                    "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80")),
+                              height: 150.0,
+                              child: Image.network(
+                                  "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"),
+                            ),
                           ),
                         ],
                       ),
@@ -130,15 +131,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    children: <Widget>[
+                                    children: const <Widget>[
                                       Text(
                                         "0",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 35,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      const Text(
+                                      Text(
                                         " lux",
                                         style: TextStyle(
                                           fontSize: 20,
@@ -183,15 +184,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                             MainAxisAlignment.center,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
-                                        children: <Widget>[
+                                        children: const <Widget>[
                                           Text(
                                             "0",
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 35,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          const Text(
+                                          Text(
                                             " ℃",
                                             style: TextStyle(
                                               fontSize: 20,
@@ -250,15 +251,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                               MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
-                                          children: [
+                                          children: const <Widget>[
                                             Text(
                                               "0",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 35,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            const Text(
+                                            Text(
                                               " %",
                                               style: TextStyle(
                                                 fontSize: 20,
@@ -270,7 +271,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                           height: 10,
                                         ),
                                         Column(
-                                          children: [Text("low")],
+                                          children: const <Widget>[
+                                            Text("low"),
+                                          ],
                                         ),
                                         const Text("Humidity"),
                                       ],
@@ -313,15 +316,15 @@ class _PlantScreenState extends State<PlantScreen> {
                                               MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
-                                          children: [
+                                          children: const <Widget>[
                                             Text(
                                               "0",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 35,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            const Text(
+                                            Text(
                                               " %",
                                               style: TextStyle(
                                                 fontSize: 20,
@@ -333,7 +336,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                           height: 10,
                                         ),
                                         Column(
-                                          children: [Text("Low")],
+                                          children: const <Widget>[
+                                            Text("Low"),
+                                          ],
                                         ),
                                         const Text("Soil Moisture"),
                                       ],
@@ -353,34 +358,36 @@ class _PlantScreenState extends State<PlantScreen> {
                               25,
                             ),
                             child: Center(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  "Seems like your Plant isn't connected",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Seems like your Plant isn't connected",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                ElevatedButton(
+                                  ElevatedButton(
                                     onPressed: () {
                                       timedNotif(4);
                                     },
-                                    child: Text("4 secs")),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, top: 20, right: 20),
-                                  child: Image.network(
-                                      "https://img.icons8.com/external-wanicon-two-tone-wanicon/64/000000/external-disconnected-cloud-technology-wanicon-two-tone-wanicon.png"),
-                                ),
-                              ],
-                            )),
+                                    child: const Text("4 secs"),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, top: 20, right: 20),
+                                    child: Image.network(
+                                        "https://img.icons8.com/external-wanicon-two-tone-wanicon/64/000000/external-disconnected-cloud-technology-wanicon-two-tone-wanicon.png"),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
                       const Text(
-                        "Plant Health",
+                        "Soil Moisture",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -433,8 +440,7 @@ class _PlantScreenState extends State<PlantScreen> {
                   recMess.payload.message);
 
               final result = jsonDecode(pt);
-              var arr = ["High", "Moderate", "Low"];
-              double avg = (q.length == 0) ? 0.0 : q.elementAt(q.length - 1);
+              double avg = (q.isEmpty) ? 0.0 : q.elementAt(q.length - 1);
 
               q.add(result["moisture"] == null
                   ? 0.0
@@ -450,12 +456,6 @@ class _PlantScreenState extends State<PlantScreen> {
                   result["light"] < 1.2) {
                 notification(3);
               }
-
-              double first = q.elementAt(0);
-              double second = q.elementAt(1) != null ? q.elementAt(1) : 0.0;
-              double third = q.elementAt(2) != null ? q.elementAt(2) : 0.0;
-              double fourth = q.elementAt(3) != null ? q.elementAt(3) : 0.0;
-              double fifth = q.elementAt(4) != null ? q.elementAt(4) : 0.0;
 
               return Padding(
                 padding: const EdgeInsets.all(
@@ -485,9 +485,10 @@ class _PlantScreenState extends State<PlantScreen> {
                           InkWell(
                             onTap: () {},
                             child: SizedBox(
-                                height: 150.0,
-                                child: Image.network(
-                                    "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80")),
+                              height: 150.0,
+                              child: Image.network(
+                                  "https://images.unsplash.com/photo-1509423350716-97f9360b4e09?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=435&q=80"),
+                            ),
                           ),
                         ],
                       ),
@@ -671,7 +672,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                                 ),
                                               )
                                             else
-                                              Text(
+                                              const Text(
                                                 'Moderate',
                                                 style: TextStyle(
                                                   fontStyle: FontStyle.italic,
@@ -797,9 +798,9 @@ class _PlantScreenState extends State<PlantScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text(
-                                              "Today",
-                                              style: const TextStyle(
+                                            const Text(
+                                              "Today at ",
+                                              style: TextStyle(
                                                 fontSize: 25,
                                                 fontStyle: FontStyle.italic,
                                                 fontFamily: 'Roboto',
@@ -835,7 +836,7 @@ class _PlantScreenState extends State<PlantScreen> {
                         ],
                       ),
                       const Text(
-                        "Plant Health",
+                        "Soil Moisture",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -971,9 +972,9 @@ class _PlantScreenState extends State<PlantScreen> {
   }
 }
 
-double approxRollingAverage(double avg, double new_sample) {
+double approxRollingAverage(double avg, double newSample) {
   avg -= avg / 5;
-  avg += new_sample / 5;
+  avg += newSample / 5;
 
   return avg;
 }

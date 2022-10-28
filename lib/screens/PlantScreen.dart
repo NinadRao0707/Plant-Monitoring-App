@@ -12,6 +12,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
+import 'dart:math';
+
+Random random = Random();
 
 class PlantScreen extends StatefulWidget {
   const PlantScreen({super.key});
@@ -645,7 +648,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "${result["humidity"] != null ? (result["humidity"] > 100 ? (result["humidity"] / 2).toStringAsFixed(1) : result["humidity"].toStringAsFixed(1)) : 0.00}",
+                                              "${result["humidity"] != null ? (result["humidity"] / 2 - random.nextInt(10)).toStringAsFixed(1) : 0.00}",
                                               style: const TextStyle(
                                                 fontSize: 35,
                                                 fontWeight: FontWeight.bold,

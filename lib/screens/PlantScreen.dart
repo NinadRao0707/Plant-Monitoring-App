@@ -453,10 +453,10 @@ class _PlantScreenState extends State<PlantScreen> {
                 q.removeFirst();
               }
               DateTime now = DateTime.now();
-              if (result["moisture"] <= 10.0) {
+              if (result["moisture"] <= 20.0) {
                 notification(2);
               } else if ((now.hour <= 15 && now.hour >= 7) &&
-                  result["light"] < 1.2) {
+                  result["light"] < 30.0) {
                 notification(3);
               }
 
@@ -648,7 +648,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "${result["humidity"] != null ? (result["humidity"] / 2 - random.nextInt(10)).toStringAsFixed(1) : 0.00}",
+                                              "${result["humidity"] != null ? (result["humidity"] > 150 ? (result["humidity"] / 4 - random.nextInt(10)) : result["humidity"] / 2 - random.nextInt(10)).toStringAsFixed(1) : 0.00}",
                                               style: const TextStyle(
                                                 fontSize: 35,
                                                 fontWeight: FontWeight.bold,
@@ -801,17 +801,8 @@ class _PlantScreenState extends State<PlantScreen> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            const Text(
-                                              "Today at ",
-                                              style: TextStyle(
-                                                fontSize: 25,
-                                                fontStyle: FontStyle.italic,
-                                                fontFamily: 'Roboto',
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
                                             Text(
-                                              DateFormat('h:mm a')
+                                              DateFormat('EEE, MMM d, h:mm a')
                                                   .format(DateTime.parse(
                                                       snapshot.data!))
                                                   .toString(),
@@ -821,13 +812,12 @@ class _PlantScreenState extends State<PlantScreen> {
                                                 fontFamily: 'Roboto',
                                               ),
                                               textAlign: TextAlign.center,
-                                            )
+                                            ),
                                           ],
                                         );
                                       } else if (snapshot.hasError) {
                                         return Text('${snapshot.error}');
                                       }
-
                                       // By default, show a loading spinner.
                                       return const CircularProgressIndicator();
                                     },
@@ -837,6 +827,19 @@ class _PlantScreenState extends State<PlantScreen> {
                             ),
                           ),
                         ],
+                      ),
+                      ElevatedButton(
+                        child: const Text(
+                          'Watered the Plant',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                        onPressed: () {},
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       const Text(
                         "Soil Moisture",

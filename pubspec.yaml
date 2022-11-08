@@ -41,7 +41,7 @@ dependencies:
   flutter_local_notifications: ^9.6.0
   timezone: ^0.8.0
   rxdart: ^0.27.4
-  
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +70,7 @@ flutter:
     - assets/certs/Private.key
     - assets/certs/RootCA.pem
     - assets/images/logo1.gif
+    - .env
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

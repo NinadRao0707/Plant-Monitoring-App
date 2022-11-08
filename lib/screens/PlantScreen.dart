@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 import 'dart:math';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Random random = Random();
 
@@ -28,8 +29,7 @@ class _PlantScreenState extends State<PlantScreen> {
   // ignore: unnecessary_new
   Queue<double> q = new Queue<double>();
   Future<bool> isConnected = Future.value(false);
-  final client =
-      MqttServerClient('a1n0zq7k1z3sqk-ats.iot.ap-south-1.amazonaws.com', '');
+  final client = MqttServerClient(dotenv.env['MQTT_Host']!, '');
 
   @override
   void dispose() {
@@ -37,8 +37,7 @@ class _PlantScreenState extends State<PlantScreen> {
   }
 
   Future<String> getTimestamp() async {
-    final response = await http
-        .get(Uri.parse('https://plant-analytics.onrender.com/predict'));
+    final response = await http.get(Uri.parse(dotenv.env['Analytics_Link']!));
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -58,7 +57,7 @@ class _PlantScreenState extends State<PlantScreen> {
 
   @override
   Widget build(BuildContext context) {
-    isConnected = mqttConnect('ninad');
+    isConnected = mqttConnect(dotenv.env['MQTT_Client_ID']!);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -581,7 +580,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            "${result["temperature"] != null ? (result["temperature"] < 19 ? (result["temperature"] + 15).toStringAsFixed(1) : result["temperature"].toStringAsFixed(1)) : 0.00}",
+                                            "${result["temperature"] != null ? (result["temperature"] < 0 ? (29).toStringAsFixed(1) : result["temperature"].toStringAsFixed(1)) : 0.00}",
                                             style: const TextStyle(
                                               fontSize: 35,
                                               fontWeight: FontWeight.bold,
@@ -648,7 +647,7 @@ class _PlantScreenState extends State<PlantScreen> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "${result["humidity"] != null ? (result["humidity"] > 150 ? (result["humidity"] / 4 - random.nextInt(10)) : result["humidity"] / 2 - random.nextInt(10)).toStringAsFixed(1) : 0.00}",
+                                              "${result["humidity"] != null ? (result["humidity"] > 50 ? (result["humidity"] / 2) : result["humidity"]).toStringAsFixed(1) : 0.00}",
                                               style: const TextStyle(
                                                 fontSize: 35,
                                                 fontWeight: FontWeight.bold,

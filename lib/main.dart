@@ -3,8 +3,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:plant_monitoring_system/screens/HomePage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() {
+  dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

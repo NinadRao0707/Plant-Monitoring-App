@@ -50,3 +50,7 @@ app.*.map.json
 
 /Analytics_Application/__pycache__
 /Analytics_Application/.venv
+
+/assets/certs/DeviceCertificate.crt
+/assets/certs/Private.key
+/assets/certs/RootCA.pem

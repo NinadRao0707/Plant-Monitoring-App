@@ -919,10 +919,11 @@ class _PlantScreenState extends State<PlantScreen> {
 
   Future<bool> mqttConnect(String uniqueID) async {
     setStatus("Connecting MQTT Broker");
-    ByteData rootCA = await rootBundle.load('assets/certs/RootCA.pem');
+    ByteData rootCA = await rootBundle.load(dotenv.env['Root_CA_Path']!);
     ByteData deviceCert =
-        await rootBundle.load('assets/certs/DeviceCertificate.crt');
-    ByteData privateKey = await rootBundle.load('assets/certs/Private.key');
+        await rootBundle.load(dotenv.env['Device_Certificate_Path']!);
+    ByteData privateKey =
+        await rootBundle.load(dotenv.env['Private_Key_Path']!);
 
     SecurityContext context = SecurityContext.defaultContext;
     context.setClientAuthoritiesBytes(rootCA.buffer.asUint8List());

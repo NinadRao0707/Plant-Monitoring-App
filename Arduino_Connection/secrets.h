@@ -9,20 +9,20 @@ const char WIFI_PASSWORD[] = ""; // WiFi Password
 
 int8_t TIME_ZONE = -5; // NYC(USA): -5 UTC
 
-const char MQTT_HOST[] = ""; // MQTT Host
+const char MQTT_HOST[] = ""; // MQTT Host Link
 
 static const char cacert[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
 -----END CERTIFICATE-----
-)EOF"; // AWS IoT Certificate
+)EOF"; // AWS ROOT_CA Certificate
 
 static const char client_cert[] PROGMEM = R"KEY(
 -----BEGIN CERTIFICATE-----
 -----END CERTIFICATE-----
-)KEY"; // AWS IoT Certificate
+)KEY"; // AWS DEVICE_CERTIFICATE Certificate
 
 // Copy contents from  XXXXXXXX-private.pem.key here â–¼
 static const char privkey[] PROGMEM = R"KEY(
 -----BEGIN RSA PRIVATE KEY-----
 -----END RSA PRIVATE KEY-----
-)KEY"; // AWS IoT Certificate
+)KEY"; // AWS PRIVATE_KEY Certificate

@@ -51,7 +51,7 @@ The functions which we have implemented are:
 ⚡️Alerts the user by showing them notifications on watering the plant\
 ⚡️Created a function to make the UI of the notification to be shown to the user\
 ⚡️To display the sensor readings\
-⚡️To display a graph depicting the health of the plant along with the date and time to water the plant\
+⚡️To display a graph depicting the health of the plant along with the date and time to water the plant
 
 Following are the UI of the mobile app:
 

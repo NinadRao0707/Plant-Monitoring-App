@@ -48,9 +48,23 @@ The application is built upon Flutter which is an open-source UI software develo
 The functions which we have implemented are:
 
 ⚡️Created the landing page for our application\
-⚡️Alerts the user by showing them notifications on watering the plant based on their date and time of the mobile application\
+⚡️Alerts the user by showing them notifications on watering the plant\
 ⚡️Created a function to make the UI of the notification to be shown to the user\
-⚡️To display the sensor readings and display a graph depicting the health of the plant along with the date and time to water the plant
+⚡️To display the sensor readings\
+⚡️To display a graph depicting the health of the plant along with the date and time to water the plant\
+
+Following are the UI of the mobile app:
+
+<table>
+  <tr>
+    <td>Home Screen</td>
+    <td>Notification on the Screen</td>
+  </tr>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/67018142/201472578-8e4ad0da-9c40-42f3-b0e6-7d5059abc5a6.jpg" height="500" /></td>
+    <td><img src="https://user-images.githubusercontent.com/67018142/201472395-1080dcc1-791a-4513-99e1-189c498e68fa.png" height="500" /></td>
+  </tr>
+</table>
 
 ## Cloud Server
 
